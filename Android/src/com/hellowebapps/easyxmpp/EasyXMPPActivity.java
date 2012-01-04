@@ -12,7 +12,7 @@ public class EasyXMPPActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         SlidingMenu menu = (SlidingMenu)findViewById(R.id.slider);
-        menu.addItemsToMenu(4);
+        menu.addItemsToMenu(6);
         menu.useSlidingMenu();
     }
 }

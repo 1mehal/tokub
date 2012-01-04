@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hellowebapps.easyxmpp.R;
-import com.hellowebapps.easyxmpp.SpringInterpolator;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import android.widget.Toast;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -28,9 +26,9 @@ import android.widget.RelativeLayout;
 
 public class SlidingMenu extends RelativeLayout {
 	protected boolean menuOut = true;
-	final int MENU_DISTANCE = 250;
+	final int MENU_DISTANCE = 150;
 	protected int menuButtonsNumber;
-	final int BASIC_ID_FOR_MENUBUTTONS = 4000;
+	final int BASIC_ID_FOR_MENUBUTTONS = 1500;
 	protected RelativeLayout _drawenField = null;
 	protected ImageView _startButton;
 	protected List<ImageView> _menuButtons = null;
@@ -84,11 +82,13 @@ public class SlidingMenu extends RelativeLayout {
 						RelativeLayout.LayoutParams.WRAP_CONTENT);
 				params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, v.getId());
 				params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, v.getId());
-				// int x = v.getDrawable().getIntrinsicHeight();
-				// int y = v.getDrawable().getIntrinsicWidth();
-				params.setMargins(countLeftMargin(bCount), 0, 0,
-						countBottomMargin(bCount));
+				int baseMarginHeight = (_startButton.getHeight() - v.getHeight()) / 2;
+				int baseMarginWidth = (_startButton.getWidth() - v.getWidth()) / 2;
+
+				params.setMargins(countLeftMargin(bCount) - baseMarginWidth, 0, 0,
+						countBottomMargin(bCount) - baseMarginHeight);
 				v.setLayoutParams(params);
+				v.setVisibility(View.GONE);
 				this.addView(v, 0);
 				bCount++;
 			}
@@ -139,6 +139,13 @@ public class SlidingMenu extends RelativeLayout {
 	}
 
 	protected void animateOut() {
+		RotateAnimation rotateMainButton = new RotateAnimation(45f, 0f,
+				Animation.RELATIVE_TO_SELF, 0.5f,
+				Animation.RELATIVE_TO_SELF, 0.5f);
+		rotateMainButton.setStartOffset(0);
+		rotateMainButton.setDuration((int) (BASIC_ID_FOR_MENUBUTTONS * 0.25 * menuButtonsNumber * 0.2));
+		_startButton.setAnimation(rotateMainButton);
+		
 		for (int i = 0; i < menuButtonsNumber; i++) {
 			final ImageView animateButton = (ImageView) findViewById(BASIC_ID_FOR_MENUBUTTONS
 					+ i);
@@ -170,9 +177,17 @@ public class SlidingMenu extends RelativeLayout {
 			
 			animateButton.setVisibility(View.VISIBLE);
 		}
+		
 	}
 
 	protected void animateIn() {
+		RotateAnimation rotateMainButton = new RotateAnimation(45f, 0f,
+				Animation.RELATIVE_TO_SELF, 0.5f,
+				Animation.RELATIVE_TO_SELF, 0.5f);
+		rotateMainButton.setStartOffset(0);
+		rotateMainButton.setDuration((int) (BASIC_ID_FOR_MENUBUTTONS * 0.25 * menuButtonsNumber * 0.2));
+		_startButton.setAnimation(rotateMainButton);
+
 		for (int i = 0; i < menuButtonsNumber; i++) {
 			final ImageView animateButton = (ImageView) findViewById(BASIC_ID_FOR_MENUBUTTONS
 					+ i);
@@ -219,11 +234,11 @@ public class SlidingMenu extends RelativeLayout {
 		_startButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View updatedView) {
 				if (menuOut) {
-					Toast.makeText(getContext(), "Sliding OUT", 4000).show();
 					animateOut();
+					_startButton.setImageResource(R.drawable.main_button_to_close);
 				} else {
-					Toast.makeText(getContext(), "Sliding IN", 4000).show();
 					animateIn();
+					_startButton.setImageResource(R.drawable.main_button_to_open);
 				}
 				menuOut = !menuOut;
 				// SlidingMenu _menu = new SlidingMenu(getApplicationContext());
