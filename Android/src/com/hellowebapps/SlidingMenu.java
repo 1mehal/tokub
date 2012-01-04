@@ -26,7 +26,7 @@ import android.widget.RelativeLayout;
 
 public class SlidingMenu extends RelativeLayout {
 	protected boolean menuOut = true;
-	final int MENU_DISTANCE = 150;
+	final int MENU_DISTANCE = 200;
 	protected int menuButtonsNumber;
 	final int BASIC_ID_FOR_MENUBUTTONS = 1500;
 	protected RelativeLayout _drawenField = null;
@@ -82,11 +82,11 @@ public class SlidingMenu extends RelativeLayout {
 						RelativeLayout.LayoutParams.WRAP_CONTENT);
 				params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, v.getId());
 				params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, v.getId());
-				int baseMarginHeight = (_startButton.getHeight() - v.getHeight()) / 2;
-				int baseMarginWidth = (_startButton.getWidth() - v.getWidth()) / 2;
+				int baseMarginHeight = (_startButton.getDrawable().getIntrinsicHeight() - v.getDrawable().getIntrinsicHeight()) / 2;
+				int baseMarginWidth = (_startButton.getDrawable().getIntrinsicWidth() - v.getDrawable().getIntrinsicWidth()) / 2;
 
-				params.setMargins(countLeftMargin(bCount) - baseMarginWidth, 0, 0,
-						countBottomMargin(bCount) - baseMarginHeight);
+				params.setMargins(countLeftMargin(bCount) + baseMarginWidth, 0, 0,
+						countBottomMargin(bCount) + baseMarginHeight);
 				v.setLayoutParams(params);
 				v.setVisibility(View.GONE);
 				this.addView(v, 0);
