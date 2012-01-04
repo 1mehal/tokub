@@ -17,6 +17,7 @@ import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
 public class SlidingMenu extends RelativeLayout {
+	final int BASIC_ID_FOR_MENUBUTTONS = 4000;
 	protected RelativeLayout _drawenField = null;
 	protected ImageView _startButton;
 	protected List<ImageView> _menuButtons = null;
@@ -36,22 +37,37 @@ public class SlidingMenu extends RelativeLayout {
 		init();
 	}
 		
-	protected boolean checkChild(int id){
+	protected boolean isChild(int id){
 		return findViewById(id) != null;
 	}
 	
+	protected void setAllParams(){
+		int i = BASIC_ID_FOR_MENUBUTTONS;
+		while (isChild(i)){
+			ImageView button = (ImageView) findViewById(i);
+			button.setBackgroundColor(GONE);
+			this.addView(button);
+			i++;
+		}
+	}
+	
+	protected int countMargins(){
+		int numberOfButtons = this.getChildCount()-1;
+		//Toast.makeText(getContext(), numberOfButtons, 4000).show();
+		return numberOfButtons;
+	}
 	protected void reinit(){
 		for(ImageView v : _menuButtons){
-			if(!checkChild(v.getId())){
+			if(!isChild(v.getId())){
 					RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-					params.setMargins(55, 55, 55, 55);
-					params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, v.getId());
+					params.setMargins(0,0,0,0);
+					params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, v.getId());
+					params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, v.getId());
 					v.setLayoutParams(params);
 					this.addView(v);
-				}
-			
+			}
 		}
-			//setAllParams();
+		//setAllParams();
 	}
 	
 	protected void init(){
@@ -78,7 +94,7 @@ public class SlidingMenu extends RelativeLayout {
 		_menuButtons.add(v);
 		reinit();
 	}
-	public void addMenuItemByNumber(int number){
+	public void addItemsToMenu(int number){
 		Resources res = getResources();
 		TypedArray immages = res.obtainTypedArray(R.array.buttonImmages);
 		for (int i = 0; i < number; i++){
@@ -94,7 +110,7 @@ public class SlidingMenu extends RelativeLayout {
 	    _startButton.setOnClickListener(new OnClickListener() {
 				public void onClick(View updatedView) {
 					
-					Toast.makeText(getContext(), "ja prazyjy", 4000).show();
+					Toast.makeText(getContext(), "Working ON", 4000).show();
 					//SlidingMenu _menu = new SlidingMenu(getApplicationContext());
 					//_menu.addMenuItemByNumber(1);
 					//setContentView(_menu);
