@@ -26,7 +26,7 @@ import android.widget.RelativeLayout;
 
 public class SlidingMenu extends RelativeLayout {
 	protected boolean menuOut = true;
-	final int MENU_DISTANCE = 200;
+	final int MENU_DISTANCE = 150;
 	protected int menuButtonsNumber;
 	final int BASIC_ID_FOR_MENUBUTTONS = 1500;
 	protected RelativeLayout _drawenField = null;
@@ -159,14 +159,11 @@ public class SlidingMenu extends RelativeLayout {
 			r.setDuration((int) (BASIC_ID_FOR_MENUBUTTONS * 0.25 * menuButtonsNumber * 0.2));
 			r.setInterpolator(new DecelerateInterpolator());
 			animationSet.addAnimation(r);
-			
-			int baseMarginHeight = (_startButton.getHeight() - animateButton.getHeight()) / 2;
-			int baseMarginWidth = (_startButton.getWidth() - animateButton.getWidth()) / 2;
 
 			TranslateAnimation a = new TranslateAnimation(
-					Animation.ABSOLUTE, (float) - countLeftMargin(i) + baseMarginWidth,
+					Animation.ABSOLUTE, (float) - countLeftMargin(i),
 					Animation.ABSOLUTE, 0f,
-					Animation.ABSOLUTE, (float) countBottomMargin(i) - baseMarginHeight,
+					Animation.ABSOLUTE, (float) countBottomMargin(i),
 					Animation.ABSOLUTE, 0f);
 			a.setDuration((int) (BASIC_ID_FOR_MENUBUTTONS * 0.25 * menuButtonsNumber * 0.15));
 			a.setInterpolator(new OvershootInterpolator(3));
@@ -181,7 +178,7 @@ public class SlidingMenu extends RelativeLayout {
 	}
 
 	protected void animateIn() {
-		RotateAnimation rotateMainButton = new RotateAnimation(45f, 0f,
+		RotateAnimation rotateMainButton = new RotateAnimation(-45f, 0f,
 				Animation.RELATIVE_TO_SELF, 0.5f,
 				Animation.RELATIVE_TO_SELF, 0.5f);
 		rotateMainButton.setStartOffset(0);
@@ -202,14 +199,11 @@ public class SlidingMenu extends RelativeLayout {
 			r.setInterpolator(new AccelerateInterpolator());
 			animationSet.addAnimation(r);
 			
-			int baseMarginHeight = (_startButton.getHeight() - animateButton.getHeight()) / 2;
-			int baseMarginWidth = (_startButton.getWidth() - animateButton.getWidth()) / 2;
-
-			TranslateAnimation a = new TranslateAnimation(
+		TranslateAnimation a = new TranslateAnimation(
 					Animation.ABSOLUTE, 0f,
-					Animation.ABSOLUTE, (float) -countLeftMargin(i) + baseMarginWidth,
+					Animation.ABSOLUTE, (float) -countLeftMargin(i),
 					Animation.ABSOLUTE, 0f,
-					Animation.ABSOLUTE, (float) countBottomMargin(i) - baseMarginHeight);
+					Animation.ABSOLUTE, (float) countBottomMargin(i));
 			a.setDuration((int) (BASIC_ID_FOR_MENUBUTTONS * 0.25 * menuButtonsNumber * 0.15));
 			a.setInterpolator(new AnticipateInterpolator(3));
 			animationSet.addAnimation(a);
