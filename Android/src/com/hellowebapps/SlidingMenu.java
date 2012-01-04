@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -88,7 +89,7 @@ public class SlidingMenu extends RelativeLayout {
 				params.setMargins(countLeftMargin(bCount), 0, 0,
 						countBottomMargin(bCount));
 				v.setLayoutParams(params);
-				this.addView(v);
+				this.addView(v, 0);
 				bCount++;
 			}
 		}
@@ -138,9 +139,8 @@ public class SlidingMenu extends RelativeLayout {
 	}
 
 	protected void animateOut() {
-		ImageView animateButton = null;
 		for (int i = 0; i < menuButtonsNumber; i++) {
-			animateButton = (ImageView) findViewById(BASIC_ID_FOR_MENUBUTTONS
+			final ImageView animateButton = (ImageView) findViewById(BASIC_ID_FOR_MENUBUTTONS
 					+ i);
 
 			AnimationSet animationSet = new AnimationSet(false);
@@ -167,13 +167,14 @@ public class SlidingMenu extends RelativeLayout {
 			animationSet.setStartOffset((long) (((menuButtonsNumber - i - 1) / (double)menuButtonsNumber) * 150));
 
 			animateButton.startAnimation(animationSet);
+			
+			animateButton.setVisibility(View.VISIBLE);
 		}
 	}
 
 	protected void animateIn() {
-		ImageView animateButton = null;
 		for (int i = 0; i < menuButtonsNumber; i++) {
-			animateButton = (ImageView) findViewById(BASIC_ID_FOR_MENUBUTTONS
+			final ImageView animateButton = (ImageView) findViewById(BASIC_ID_FOR_MENUBUTTONS
 					+ i);
 
 			AnimationSet animationSet = new AnimationSet(false);
@@ -200,6 +201,17 @@ public class SlidingMenu extends RelativeLayout {
 			
 			animationSet.setStartOffset((long) ((i / (double)menuButtonsNumber) * 150));
 			animateButton.startAnimation(animationSet);
+			
+			animationSet.setAnimationListener(new AnimationListener() {
+				
+				public void onAnimationStart(Animation arg0) {}
+				
+				public void onAnimationRepeat(Animation arg0) {}
+				
+				public void onAnimationEnd(Animation arg0) {
+					animateButton.setVisibility(View.GONE);
+				}
+			});
 		}
 	}
 
