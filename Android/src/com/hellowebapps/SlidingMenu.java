@@ -17,10 +17,15 @@ import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
 public class SlidingMenu extends RelativeLayout {
+	protected boolean menuOut = true;
+	final int MENU_DISTANCE = 150;
+	protected int menuButtonsNumber;
 	final int BASIC_ID_FOR_MENUBUTTONS = 4000;
 	protected RelativeLayout _drawenField = null;
 	protected ImageView _startButton;
 	protected List<ImageView> _menuButtons = null;
+	protected int bCount = 0;
+
 
 	public SlidingMenu(Context context) {
 		super(context);
@@ -41,30 +46,32 @@ public class SlidingMenu extends RelativeLayout {
 		return findViewById(id) != null;
 	}
 	
-	protected void setAllParams(){
-		int i = BASIC_ID_FOR_MENUBUTTONS;
-		while (isChild(i)){
-			ImageView button = (ImageView) findViewById(i);
-			button.setBackgroundColor(GONE);
-			this.addView(button);
-			i++;
-		}
+	protected int countBottomMargin(int buttonNumero){
+		double angle = ((double) buttonNumero/(double)(menuButtonsNumber-1)) * (Math.PI/2);
+		int y = (int) (MENU_DISTANCE * Math.sin(angle));
+//		Log.i("BottomMargin", "y = " + y);
+		return y;	}
+	
+	protected int countLeftMargin(int buttonNumero){
+		double angle = ((double)buttonNumero/(double)(menuButtonsNumber-1)) * (Math.PI/2);
+		int x = (int) (MENU_DISTANCE * Math.cos(angle));
+//		Log.i("buttonNumero", "buttonNumero = " + buttonNumero);
+//		Log.i("menuButtonsNumber", "menuButtonsNumber = " + menuButtonsNumber);
+//		Log.i("Angle", "angle = " + angle);
+//		Log.i("LeftMargin", "x = " + x);
+		return x;
 	}
 	
-	protected int countMargins(){
-		int numberOfButtons = this.getChildCount()-1;
-		//Toast.makeText(getContext(), numberOfButtons, 4000).show();
-		return numberOfButtons;
-	}
 	protected void reinit(){
 		for(ImageView v : _menuButtons){
 			if(!isChild(v.getId())){
-					RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-					params.setMargins(0,0,0,0);
-					params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, v.getId());
-					params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, v.getId());
-					v.setLayoutParams(params);
-					this.addView(v);
+				RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+				params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, v.getId());
+				params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, v.getId());
+				params.setMargins(countLeftMargin(bCount),0,0,countBottomMargin(bCount));
+				v.setLayoutParams(params);
+				this.addView(v);
+				bCount ++ ;
 			}
 		}
 		//setAllParams();
@@ -86,7 +93,7 @@ public class SlidingMenu extends RelativeLayout {
 		//this.addView(_drawenField);
 		}
 		
-	public void addMenuItem(ImageView v){
+	protected void addMenuItem(ImageView v){
 		if(_menuButtons == null){
 			_menuButtons = new ArrayList<ImageView>();
 		}
@@ -95,12 +102,13 @@ public class SlidingMenu extends RelativeLayout {
 		reinit();
 	}
 	public void addItemsToMenu(int number){
+		menuButtonsNumber = number;
 		Resources res = getResources();
 		TypedArray immages = res.obtainTypedArray(R.array.buttonImmages);
 		for (int i = 0; i < number; i++){
 			ImageView button = new ImageView(getContext());
 			button.setImageDrawable(immages.getDrawable(i));
-			button.setId(4000+i);
+			button.setId(BASIC_ID_FOR_MENUBUTTONS+i);
 			addMenuItem(button);
 		}
 		
@@ -109,8 +117,12 @@ public class SlidingMenu extends RelativeLayout {
 	public void useSlidingMenu(){
 	    _startButton.setOnClickListener(new OnClickListener() {
 				public void onClick(View updatedView) {
-					
-					Toast.makeText(getContext(), "Working ON", 4000).show();
+					if (menuOut){
+						Toast.makeText(getContext(), "Sliding OUT", 4000).show();
+					} else {
+						Toast.makeText(getContext(), "Sliding IN", 4000).show();
+					}
+					menuOut = !menuOut;
 					//SlidingMenu _menu = new SlidingMenu(getApplicationContext());
 					//_menu.addMenuItemByNumber(1);
 					//setContentView(_menu);
