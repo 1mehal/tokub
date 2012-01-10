@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 public class EasyXMPPActivity extends Activity {
     /** Called when the activity is first created. */
@@ -21,7 +22,7 @@ public class EasyXMPPActivity extends Activity {
         for (int i = 0; i < 6; i++){
         	menu.setOnClickListener(i, new OnClickListener() {
 				public void onClick(View arg0) {
-					System.out.print("clicked button # ");
+					Toast.makeText(getApplicationContext(), "button pressed", 4000);
 				}
 			});
         }
