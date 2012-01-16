@@ -22,7 +22,7 @@ public class EasyXMPPActivity extends Activity {
         for (int i = 0; i < 6; i++){
         	menu.setOnClickListener(i, new OnClickListener() {
 				public void onClick(View arg0) {
-					Toast.makeText(getApplicationContext(), "button pressed", 4000);
+					Toast.makeText(getApplicationContext(), "button pressed" + arg0.getId(), 4000).show();
 				}
 			});
         }
