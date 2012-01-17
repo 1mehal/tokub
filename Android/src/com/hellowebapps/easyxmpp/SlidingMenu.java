@@ -53,13 +53,13 @@ public class SlidingMenu extends RelativeLayout {
 	public SlidingMenu(Context context, AttributeSet attrs) {
 		
 		super(context, setDefaults(attrs));
-		RelativeLayout.LayoutParams params = new LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
-		this.setLayoutParams(params);
+//		RelativeLayout.LayoutParams params = new LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
+//		this.setLayoutParams(params);
 		init();
 	}
 
 	private static AttributeSet setDefaults(AttributeSet attrs) {
-		new CombinedAttributeSet(attrs);
+//		new CombinedAttributeSet(attrs);
 		return attrs;
 	}
 
